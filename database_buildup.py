@@ -58,7 +58,7 @@ mycursor = mydb.cursor()
 #mycursor.execute("CREATE DATABASE dashboard")
 
 # select database to modify
-# mycursor.execute("use dashboard")
+mycursor.execute("use dashboard")
 
 # delete table
 # mycursor.execute("drop table if exists infotracer")
