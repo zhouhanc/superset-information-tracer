@@ -701,8 +701,8 @@ print('helper table done')
 # infotracer and sentiment: daily update
 today = datetime.now(pytz.timezone('America/Mexico_City')).date().strftime('%Y-%m-%d')
 tomorrow=(datetime.now(pytz.timezone('America/Mexico_City')).date() + timedelta(days=1)).strftime('%Y-%m-%d')
-#generate_infotracer_and_sentiment_table(start_date=today, end_date=today, ytb_end_date=tomorrow,update_db=False)
-#print('infotracer and sentiment table done')
+generate_infotracer_and_sentiment_table(start_date=today, end_date=today, ytb_end_date=tomorrow,update_db=False)
+print('infotracer and sentiment table done')
 
 # wordcloud: daily update
 generate_wordcloud_table()
