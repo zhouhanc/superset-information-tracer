@@ -76,7 +76,7 @@ mycursor.execute("use dashboard")
 
 """#ELT helper table"""
 
-def generate_helper_table(start_date,end_date,update_db=True):
+def generate_helper_table(start_date,end_date,query_dict,update_db=True):
   
 ##############################################################################
 ##  This function generates a helper table that is used to join with other table to fill in time gaps.
@@ -86,7 +86,7 @@ def generate_helper_table(start_date,end_date,update_db=True):
   # Define platforms and labels
   platforms = ['facebook','twitter','instagram','youtube','youtube comment']
   labels = ['POS','NEU','NEG']
-  candidate_name=['Manolo Jiménez Salinas','Armando Guadiana Tijerina','Ricardo Mejia Berdeja','Lenin Perez Rivera']
+  candidate_name=list(query_dict.keys())
   # Generate date range
   date_range = pd.date_range(start=start_date, end=end_date)
 
@@ -124,7 +124,7 @@ def convert_time(column):
   column = column.apply(convert_timestamp)
   return column
 
-def generate_infotracer_table(start_date,end_date,update_db=True):
+def generate_infotracer_table(start_date,end_date,query_dict,update_db=True):
 
 ########################################################################################
 ##  This function query data using information tracer, store in df, convert time and insert
@@ -132,12 +132,6 @@ def generate_infotracer_table(start_date,end_date,update_db=True):
 ##  This function is part of another function. DO NOT run directly.
 ########################################################################################
 
-  # predefined query
-  query_dict={'Manolo Jiménez Salinas':'"Manolo Jiménez Salinas" OR manolojim OR manolojimenezs OR Manolo.Jimenez.Salinas',
-      'Armando Guadiana Tijerina':'"Armando Guadiana Tijerina" OR aguadiana OR armandoguadianatijerina OR ArmandoGuadianaTijerina',
-'Ricardo Mejia Berdeja':'"Ricardo Mejia Berdeja" OR RicardoMeb OR ricardomeb OR RicardoMejiaMx',
-    'Lenin Perez Rivera':'"Lenin Perez Rivera" OR leninperezr OR leninperezr OR leninperezr'
-}
   # information tracer token
   with open(os.path.expanduser('~/infotracer_token.txt'), 'r') as f:
       your_token = f.read()
@@ -319,18 +313,13 @@ def convert_time_ytb(column):
 
 """## youtube query"""
 
-def query_youtube_comment(start_date,end_date):
+def query_youtube_comment(start_date,end_date,query_dict):
 ##############################################################################
 ##  This function use information tracer result to query for youtube comment, 
 ##  and convert utc time to mexico time.
 ##  This function is part of another function. DO NOT run directly.
 ##############################################################################
-  # predefined query
-  query_dict={'Manolo Jiménez Salinas':'"Manolo Jiménez Salinas" OR manolojim OR manolojimenezs OR Manolo.Jimenez.Salinas',
-      'Armando Guadiana Tijerina':'"Armando Guadiana Tijerina" OR aguadiana OR armandoguadianatijerina OR ArmandoGuadianaTijerina',
-'Ricardo Mejia Berdeja':'"Ricardo Mejia Berdeja" OR RicardoMeb OR ricardomeb OR RicardoMejiaMx',
-    'Lenin Perez Rivera':'"Lenin Perez Rivera" OR leninperezr OR leninperezr OR leninperezr'
-}
+
   # information tracer token
   with open(os.path.expanduser('~/infotracer_token.txt'), 'r') as f:
       your_token = f.read()
@@ -465,7 +454,7 @@ def sent_analyze(df):
   df['negative']=neg_prob
   return df
 
-def generate_infotracer_and_sentiment_table(start_date,end_date,ytb_end_date,update_db=True):
+def generate_infotracer_and_sentiment_table(start_date,end_date,ytb_end_date,query_dict, update_db=True):
 
 ###########################################################################
 ## This function generates both infotracer and sentiment table.
@@ -473,21 +462,16 @@ def generate_infotracer_and_sentiment_table(start_date,end_date,ytb_end_date,upd
 ## merge result, process text and conduct sentiment analysis.
 ###########################################################################
 
-  # predefined query
-  query_dict={'Manolo Jiménez Salinas':'"Manolo Jiménez Salinas" OR manolojim OR manolojimenezs OR Manolo.Jimenez.Salinas',
-      'Armando Guadiana Tijerina':'"Armando Guadiana Tijerina" OR aguadiana OR armandoguadianatijerina OR ArmandoGuadianaTijerina',
-'Ricardo Mejia Berdeja':'"Ricardo Mejia Berdeja" OR RicardoMeb OR ricardomeb OR RicardoMejiaMx',
-    'Lenin Perez Rivera':'"Lenin Perez Rivera" OR leninperezr OR leninperezr OR leninperezr'
-}
+
   # information tracer token
   with open(os.path.expanduser('~/infotracer_token.txt'), 'r') as f:
       your_token = f.read()
 
   # get information tracer query result (also insert to db)
-  df=generate_infotracer_table(start_date=start_date,end_date=end_date,update_db=update_db)
+  df=generate_infotracer_table(start_date=start_date,end_date=end_date,query_dict=query_dict,update_db=update_db)
 
   #get youtube comment query result
-  ytbcomment_df=query_youtube_comment(start_date=start_date,end_date=ytb_end_date)
+  ytbcomment_df=query_youtube_comment(start_date=start_date,end_date=ytb_end_date,query_dict=query_dict)
 
   # merge results
   # text for sentiment table: everything in df + used youtube raw data to extract comment
@@ -588,14 +572,8 @@ def generate_wordcloud_table():
 
 """# ETL data for network"""
 
-def generate_network_table(start_date,end_date,update_db=True):
+def generate_network_table(start_date,end_date,query_dict, update_db=True):
   
-  # predefined query
-  query_dict={'Manolo Jiménez Salinas':'"Manolo Jiménez Salinas" OR manolojim OR manolojimenezs OR Manolo.Jimenez.Salinas',
-      'Armando Guadiana Tijerina':'"Armando Guadiana Tijerina" OR aguadiana OR armandoguadianatijerina OR ArmandoGuadianaTijerina',
-'Ricardo Mejia Berdeja':'"Ricardo Mejia Berdeja" OR RicardoMeb OR ricardomeb OR RicardoMejiaMx',
-    'Lenin Perez Rivera':'"Lenin Perez Rivera" OR leninperezr OR leninperezr OR leninperezr'
-}
 
   # information tracer token
   with open(os.path.expanduser('~/infotracer_token.txt'), 'r') as f:
@@ -691,17 +669,21 @@ def generate_network_table(start_date,end_date,update_db=True):
 
 """# Daily update"""
 
-
+query_dict={'Manolo Jiménez Salinas':'"Manolo Jiménez Salinas" OR manolojim OR manolojimenezs OR Manolo.Jimenez.Salinas',
+      'Armando Guadiana Tijerina':'"Armando Guadiana Tijerina" OR aguadiana OR armandoguadianatijerina OR ArmandoGuadianaTijerina',
+'Ricardo Mejia Berdeja':'"Ricardo Mejia Berdeja" OR RicardoMeb OR ricardomeb OR RicardoMejiaMx',
+    'Lenin Perez Rivera':'"Lenin Perez Rivera" OR leninperezr OR leninperezr OR leninperezr'
+}
 
 # helper: daily update
 today = datetime.now(pytz.timezone('America/Mexico_City')).date()
-generate_helper_table(start_date=today, end_date=today,update_db=False)
+generate_helper_table(start_date=today, end_date=today,query_dict=query_dict, update_db=False)
 print('helper table done')
 
 # infotracer and sentiment: daily update
 today = datetime.now(pytz.timezone('America/Mexico_City')).date().strftime('%Y-%m-%d')
 tomorrow=(datetime.now(pytz.timezone('America/Mexico_City')).date() + timedelta(days=1)).strftime('%Y-%m-%d')
-generate_infotracer_and_sentiment_table(start_date=today, end_date=today, ytb_end_date=tomorrow,update_db=False)
+generate_infotracer_and_sentiment_table(start_date=today, end_date=today, ytb_end_date=tomorrow,query_dict=query_dict,update_db=False)
 print('infotracer and sentiment table done')
 
 # wordcloud: daily update
@@ -709,5 +691,5 @@ generate_wordcloud_table()
 print('wordcloud table done')
 
 # network: daily update
-generate_network_table(start_date=today, end_date=today,update_db=False)
+generate_network_table(start_date=today, end_date=today,query_dict=query_dict,update_db=False)
 print('network table done')
