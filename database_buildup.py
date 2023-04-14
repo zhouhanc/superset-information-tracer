@@ -674,7 +674,8 @@ query_dict={'Manolo Jiménez Salinas':'"Manolo Jiménez Salinas" OR manolojim OR
 'Ricardo Mejia Berdeja':'"Ricardo Mejia Berdeja" OR RicardoMeb OR ricardomeb OR RicardoMejiaMx',
     'Lenin Perez Rivera':'"Lenin Perez Rivera" OR leninperezr OR leninperezr OR leninperezr'
 }
-
+print('##############################')
+print('Update starts')
 # helper: daily update
 today = datetime.now(pytz.timezone('America/Mexico_City')).date()
 generate_helper_table(start_date=today, end_date=today,query_dict=query_dict, update_db=False)
@@ -693,3 +694,6 @@ print('wordcloud table done')
 # network: daily update
 generate_network_table(start_date=today, end_date=today,query_dict=query_dict,update_db=False)
 print('network table done')
+print('Update ends')
+print('##############################')
+
