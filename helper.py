@@ -49,7 +49,7 @@ def generate_helper_table(start_date,end_date,query_dict,update_db=True):
   
     #read db configs
     with open(os.path.expanduser('~/db_info.txt'), 'r') as f:
-    lines = f.readlines()
+        lines = f.readlines()
 
     localhost = lines[0].strip()
     username = lines[1].strip()

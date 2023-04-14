@@ -52,7 +52,7 @@ def generate_wordcloud_table():
 
   #read db configs
   with open(os.path.expanduser('~/db_info.txt'), 'r') as f:
-  lines = f.readlines()
+    lines = f.readlines()
 
   localhost = lines[0].strip()
   username = lines[1].strip()
