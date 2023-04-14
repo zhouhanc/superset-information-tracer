@@ -33,6 +33,22 @@ from wordcloud import WordCloud
 
 """# ETL data for network"""
 
+def convert_time(column):
+
+##############################################################################
+##  This function takes the datetime column of any dataframe 
+##  and convert utc time to mexico time.
+##  This function is part of another function. DO NOT run directly.
+##############################################################################
+
+  column=column.apply(lambda x: pytz.utc.localize(x))
+  #utc to mexico time
+  mexico_tz = timezone('America/Mexico_City')
+  convert_timestamp = lambda x: x.astimezone(mexico_tz).replace(tzinfo=None)
+  column = column.apply(convert_timestamp)
+  return column
+
+
 def generate_network_table(start_date,end_date,query_dict, update_db=True):
   
 
