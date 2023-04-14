@@ -140,7 +140,7 @@ def generate_infotracer_table(start_date,end_date,query_dict,update_db=True):
   df=[]
 
   for candidate, query in query_dict.items():
-    id_hash256 = informationtracer.trace(query=query, token=your_token, start_date=start_date, end_date=end_date)
+    id_hash256 = informationtracer.trace(query=query, token=your_token, start_date=start_date, end_date=end_date, skip_result=True)
     url = "https://informationtracer.com/api/v1/result?token={}&id_hash256={}".format(your_token, id_hash256)
     results = requests.get(url).json() #will get json for all data of keyword, results is a dictionary
 
@@ -581,7 +581,7 @@ def generate_network_table(start_date,end_date,query_dict, update_db=True):
 
   for candidate, query in query_dict.items():
     ## extract data
-    id_hash256 = informationtracer.trace(query=query, token=your_token, start_date=start_date, end_date=end_date)
+    id_hash256 = informationtracer.trace(query=query, token=your_token, start_date=start_date, end_date=end_date, skip_result=True)
     url = "https://informationtracer.com/cross_platform/{}/interaction_network_{}.json".format(id_hash256[:3], id_hash256)
 
     network_json = requests.get(url).json()
