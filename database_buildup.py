@@ -116,6 +116,7 @@ today = datetime.now(pytz.timezone('America/Mexico_City')).date()
 generate_helper_table(start_date=today, end_date=today,query_dict=query_dict, update_db=False)
 print('helper table done')
 
+'''
 # infotracer and sentiment: daily update
 print('infotracer and sentiment table start')
 today = datetime.now(pytz.timezone('America/Mexico_City')).date().strftime('%Y-%m-%d')
@@ -136,4 +137,4 @@ print('network table done')
 print('Update ends')
 print('##############################')
 
-
+'''
