@@ -92,6 +92,7 @@ query_dict={'Manolo Jiménez Salinas':'"Manolo Jiménez Salinas" OR manolojim OR
 
 
 """# Historical"""
+'''
 # helper: add historical data
 generate_helper_table(start_date="2023-04-09",end_date="2023-04-16",query_dict=query_dict, update_db=True)
 
@@ -101,10 +102,11 @@ generate_infotracer_and_sentiment_table(start_date="2023-04-08",end_date="2023-0
 generate_network_table(start_date="2023-04-08",end_date="2023-04-16",query_dict=query_dict,update_db=True)
 # wordcloud
 generate_wordcloud_table()
+'''
 
 
 """# Daily update"""
-'''
+
 print('##############################')
 print('Update starts')
 
@@ -134,4 +136,4 @@ print('network table done')
 print('Update ends')
 print('##############################')
 
-'''
+
