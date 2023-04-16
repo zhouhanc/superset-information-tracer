@@ -113,7 +113,8 @@ print('Update starts')
 # helper: daily update
 print('helper table starts')
 today = datetime.now(pytz.timezone('America/Mexico_City')).date()
-generate_helper_table(start_date=today, end_date=today,query_dict=query_dict, update_db=False)
+tomorrow=datetime.now(pytz.timezone('America/Mexico_City')).date() + timedelta(days=1)
+generate_helper_table(start_date=tomorrow, end_date=tomorrow,query_dict=query_dict, update_db=False)
 print('helper table done')
 
 
@@ -121,7 +122,7 @@ print('helper table done')
 print('infotracer and sentiment table start')
 today = datetime.now(pytz.timezone('America/Mexico_City')).date().strftime('%Y-%m-%d')
 tomorrow=(datetime.now(pytz.timezone('America/Mexico_City')).date() + timedelta(days=1)).strftime('%Y-%m-%d')
-#generate_infotracer_and_sentiment_table(start_date=today, end_date=today, ytb_end_date=tomorrow,query_dict=query_dict,update_db=False)
+generate_infotracer_and_sentiment_table(start_date=today, end_date=today, ytb_end_date=tomorrow,query_dict=query_dict,update_db=False)
 print('infotracer and sentiment table done')
 
 # wordcloud: daily update
