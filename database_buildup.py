@@ -122,7 +122,7 @@ print('helper table done')
 print('infotracer and sentiment table start')
 today = datetime.now(pytz.timezone('America/Mexico_City')).date().strftime('%Y-%m-%d')
 tomorrow=(datetime.now(pytz.timezone('America/Mexico_City')).date() + timedelta(days=1)).strftime('%Y-%m-%d')
-generate_infotracer_and_sentiment_table(start_date=today, end_date=today, ytb_end_date=today,query_dict=query_dict,update_db=True)
+generate_infotracer_and_sentiment_table(start_date=today, end_date=tomorrow, ytb_end_date=tomorrow,query_dict=query_dict,update_db=True)
 print('infotracer and sentiment table done')
 
 # wordcloud: daily update
@@ -132,7 +132,7 @@ print('wordcloud table done')
 
 # network: daily update
 print('network table starts')
-generate_network_table(start_date=today, end_date=today,query_dict=query_dict,update_db=True)
+generate_network_table(start_date=today, end_date=tomorrow,query_dict=query_dict,update_db=True)
 print('network table done')
 
 print('Update ends')
