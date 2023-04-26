@@ -139,3 +139,44 @@ print('Update ends')
 print('##############################')
 
 
+print('##############################')
+print('##############################')
+print('##############################')
+print('##############################')
+print('##############################')
+
+
+
+"""# Refresh old data"""
+
+'''
+This code removes data from the date 48 hours ago and recollects it because the data 
+becomes more stable after that time period. This ensures that we are working 
+with the most reliable data possible.
+''' 
+
+print('##############################')
+print('start refresh')
+two_days_ago=(datetime.now(pytz.timezone('America/Mexico_City')).date() - timedelta(days=2)).strftime('%Y-%m-%d')
+three_days_ago=(datetime.now(pytz.timezone('America/Mexico_City')).date() - timedelta(days=3)).strftime('%Y-%m-%d')
+
+# delete
+# data in db is mexico timezone
+infotracer_query="DELETE FROM infotracer WHERE datetime >= '"+three_days_ago+" 18:00:00' AND datetime <= '"+two_days_ago+" 18:00:00'"
+sentiment_query="DELETE FROM sentiment WHERE datetime >= '"+three_days_ago+" 18:00:00' AND datetime <= '"+two_days_ago+" 18:00:00'"
+
+mycursor.execute(infotracer_query)
+mycursor.execute(sentiment_query)
+
+mydb.commit()
+print('old data deleted')
+
+# recollect
+print('start recollect')
+generate_infotracer_and_sentiment_table(start_date=two_days_ago, end_date=two_days_ago, ytb_end_date=two_days_ago,update_db=True)
+print('recollect end')
+
+print('refresh ends')
+print('##############################')
+
+
