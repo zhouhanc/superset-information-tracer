@@ -173,7 +173,7 @@ print('old data deleted')
 
 # recollect
 print('start recollect')
-generate_infotracer_and_sentiment_table(start_date=two_days_ago, end_date=two_days_ago, ytb_end_date=two_days_ago,update_db=True)
+generate_infotracer_and_sentiment_table(start_date=two_days_ago, end_date=two_days_ago, ytb_end_date=two_days_ago, query_dict=query_dict,update_db=True)
 print('recollect end')
 
 print('refresh ends')
