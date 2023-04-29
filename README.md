@@ -30,7 +30,7 @@ A multi-narrative, multi-platform information tracing dashboard
 
 ### Interactions
 
-**How do we define interactions?**<br>
+**How we define interactions?**<br>
 .....
 
 **1. Total Interactions**<br>
@@ -53,25 +53,34 @@ $$\frac{\text{candidate}_i \text{ interaction}}{\sum\text{candidate}_i \text{ in
 ### Sentiment Analysis
 We work with three types of sentiment: Positive, Neutral, Negative. To improve the accuracy of sentiment analysis, we parse each post into individual sentences and assign each sentence the interaction of that post.<br>
 <br>
-**1. Sentence Sentiment Distribution**
+**1. Evaluación total**<br>
+This graph shows the cumulative number of sentences of each sentiment type by candidates. 
 
+**2. Evaluación en el tiempo**<br>
+This graph shows the number of sentences of each sentiment type by candidates daily.
 
-**2. Sentence Sentiment Time Series**
+**3. Interacciones totales**<br>
+Graph 1 and 2 only consider number of sentences. Graph 3 and 4 use number of interactions of each sentence as a weight. For example, if a sentence is negative and has 1k interactions, all 1k interactions will be put into negative class. This graph shows the cumulative number of interactions of each sentiment type by candidates. 
 
-
-**3. Interaction Sentiment Distribution**
-
-
-
-**4. Interaction Sentiment Time Series**
-
+**4. Interacciones en el tiempo**<br>
+This graph shows the number of interactions of each sentiment type by candidates daily.
 
 
 ### Principal Actor and Word Cloud
+**1. Principal Actor**<br>
+This table shows username, number of interactions and post content of top posts within last 14 days for each candidate on each platform.
+
+**2. Word Cloud**<br>
+It shows words that occur most from all posts related to a candidate on a platform within last 14 days.
 
 ### Network Analysis
+Each **node** represents a user, a hashtag or an url.<br>
+An **edge** means a user post with this hashtag or url.<br>
 
-
+How we calculate the **weight of an edge** between node user-A and node hashtag-B:<br>
+1. Collect all posts from user-A that mentions hashtag-B
+2. Sum up all interaction counts 
+3. Take the natural logarithm of the sum (why? the edge weight follows a logarithmic distribution. we take the log to visualize edges because the visualization tool assumes a linear weight distribution)
 
 
 ## Architecture
