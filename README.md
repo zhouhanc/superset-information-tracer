@@ -7,6 +7,7 @@ A multi-narrative, multi-platform information tracing dashboard
 
 [**General Functions of the Dashboard**](#general-functions-of-the-dashboard) |
 [**Graph Documentation**](#graph-documentation) | 
+[**Architecture**](#architecture) |
 [**Installation and Configuration**](#installation-and-configuration) |
 
 ## General Functions of the Dashboard
@@ -89,7 +90,7 @@ Database Schema,
 update mechanism, etc
 
 ## Installation and Configuration
-[TODO]
+
 
 ## License
 MIT
