@@ -5,7 +5,8 @@ A multi-narrative, multi-platform information tracing dashboard
 - Useful to monitor multiple narratives over multiple platforms
 - Real-world use case: monitor and compare popularity and sentiments of 4 candidates during the 2023 Coahuila Election  
 
-[**How to use this dashboard**](#how-to-use-this-dashboard) | 
+[**General Functions of the Dashboard**](#general-functions-of-the-dashboard) |
+[**Graph Documentation**](#graph-documentation) | 
 [**Installation and Configuration**](#installation-and-configuration) |
 
 ## General Functions of the Dashboard
@@ -18,14 +19,13 @@ A multi-narrative, multi-platform information tracing dashboard
 - Click on column names to sort tables.
 - Hover on an edge or node to check weight and highlight part of the network.
 
-
-## How to use this dashboard?
+## Graph Documentation
 
 ### Content 
-- **Interactions**
-- **Sentiment Analysis**
-- **Principal Actor and Word Cloud**
-- **Network Analysis**
+- [**Interactions**](#interactions)
+- [**Sentiment Analysis**](#sentiment-analysis)
+- [**Principal Actor and Word Cloud**](#principal-actor-and-word-cloud)
+- [**Network Analysis**](#network-analysis)
 
 
 ### Interactions
@@ -82,6 +82,7 @@ How we calculate the **weight of an edge** between node user-A and node hashtag-
 2. Sum up all interaction counts 
 3. Take the natural logarithm of the sum (why? the edge weight follows a logarithmic distribution. we take the log to visualize edges because the visualization tool assumes a linear weight distribution)
 
+The network graph is cumulative, and only shows edges with weight higher than average.
 
 ## Architecture
 Database Schema,
