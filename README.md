@@ -32,7 +32,10 @@ A multi-narrative, multi-platform information tracing dashboard
 ### Interactions
 
 **How we define interactions?**<br>
-.....
+- Twitter: The total number of retweet count and like count on a Twitter post
+- Facebook: The total number of reactions, shares and comments on a Facebook post
+- Instagram: The total number of likes and comments on an Instagram post
+- Youtube: The total number of like count and comment count on a Youtube video
 
 **1. Total Interactions**<br>
 This graph shows how total number of daily interactions (aggregated statistics from Twitter, Facebook, Instagram, Youtube) change by time for different candidates.
