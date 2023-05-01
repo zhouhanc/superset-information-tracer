@@ -84,10 +84,10 @@ mycursor.execute("use dashboard")
 # mycursor.execute("create table helper (datetime timestamp,candidate_name varchar(255),label varchar(255),platform varchar(255))")
 
 
-query_dict={'Manolo Jiménez Salinas':'"Manolo Jiménez Salinas" OR manolojim OR manolojimenezs OR Manolo.Jimenez.Salinas',
+query_dict={'Manolo Jiménez Salinas':'"Manolo Jimenez Salinas" OR "Manolo Jiménez Salinas" OR manolojim OR manolojimenezs OR Manolo.Jimenez.Salinas',
       'Armando Guadiana Tijerina':'"Armando Guadiana Tijerina" OR aguadiana OR armandoguadianatijerina OR ArmandoGuadianaTijerina',
-'Ricardo Mejia Berdeja':'"Ricardo Mejia Berdeja" OR RicardoMeb OR ricardomeb OR RicardoMejiaMx',
-    'Lenin Perez Rivera':'"Lenin Perez Rivera" OR leninperezr OR leninperezr OR leninperezr'
+'Ricardo Mejia Berdeja':'"Ricardo Mejía Berdeja" OR "Ricardo Mejia Berdeja" OR RicardoMeb OR ricardomeb OR RicardoMejiaMx',
+    'Lenin Perez Rivera':'"Lenin Pérez Rivera" OR "Lenin Perez Rivera" OR leninperezr OR leninperezr OR leninperezr'
 }
 
 
