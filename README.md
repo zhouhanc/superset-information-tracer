@@ -89,10 +89,9 @@ How we calculate the **weight of an edge** between node user-A and node hashtag-
 The network graph is cumulative, and only shows edges with weight higher than average.
 
 ## Architecture
-Database Schema,
-update mechanism, etc
+![image](https://user-images.githubusercontent.com/71556325/236229740-f94b4f08-8b87-4c9d-aab8-de4f996cc766.png)
 
-## Installation and Configuration
+
 
 
 ## License
