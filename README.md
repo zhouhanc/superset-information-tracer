@@ -96,6 +96,24 @@ The network graph is cumulative, and only shows edges with weight higher than av
 - **Refresh:** We also refresh data collected 48 hours ago, as real-time interactions tend to stabilize after this time period.
 
 ## Installation and Configuration
+- Clone the repository
+```
+git clone 
+```
+- Prepare db_info.txt, infotracer_token.txt, youtube_tokens.txt and modify paths
+- Schedule database_buildup.py daily using crontab
+```
+# create crontab job
+crontab -e
+
+PATH=<...> # sync the path with system
+45 23 * * * python ~/superset-information-tracer/database_buildup.py
+/tmp/dashboard_log/monitor_$(date +\%Y\%m\%d_\%H\%M\%S).txt  # save dashboard building log
+# add empty line at the end to run
+
+# exit and view crontab job
+crontab -l
+```
 
 
 
