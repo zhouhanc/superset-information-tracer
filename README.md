@@ -98,7 +98,7 @@ The network graph is cumulative, and only shows edges with weight higher than av
 ## Installation and Configuration
 - Clone the repository
 ```
-git clone 
+git clone https://github.com/zhouhanc/superset-information-tracer.git
 ```
 - Prepare db_info.txt, infotracer_token.txt, youtube_tokens.txt and modify paths
 - Schedule database_buildup.py daily using crontab
