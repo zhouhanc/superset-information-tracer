@@ -89,8 +89,13 @@ How we calculate the **weight of an edge** between node user-A and node hashtag-
 The network graph is cumulative, and only shows edges with weight higher than average.
 
 ## Architecture
-![image](https://user-images.githubusercontent.com/71556325/236229740-f94b4f08-8b87-4c9d-aab8-de4f996cc766.png)
+![image](https://user-images.githubusercontent.com/71556325/236377040-537f8e51-d1ee-45be-9107-49ea2d48ee17.png)
 
+**Update Mechanism**<br>
+- **Daily Update:** We perform daily data collection at 11:45 PM UTC to capture the latest data for the current day.
+- **Refresh:** We also refresh data collected 48 hours ago, as real-time interactions tend to stabilize after this time period.
+
+## Installation and Configuration
 
 
 
