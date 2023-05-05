@@ -8,7 +8,7 @@ A multi-narrative, multi-platform information tracing dashboard
 [**General Functions of the Dashboard**](#general-functions-of-the-dashboard) |
 [**Graph Documentation**](#graph-documentation) | 
 [**Architecture**](#architecture) |
-[**Installation and Configuration**](#installation-and-configuration) |
+[**Installation and Configuration**](#installation-and-configuration) 
 
 ## General Functions of the Dashboard
 - Hover on graphs to see statistics in details.
