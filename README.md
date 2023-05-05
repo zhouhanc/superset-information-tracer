@@ -3,7 +3,8 @@ A multi-narrative, multi-platform information tracing dashboard
 
 - A dashboard built on top of Information Tracer data 
 - Useful to monitor multiple narratives over multiple platforms
-- Real-world use case: monitor and compare popularity and sentiments of 4 candidates during the 2023 Coahuila Election  
+- Real-world use case: monitor and compare popularity and sentiments of 4 candidates during the 2023 Coahuila Election 
+<br>https://mexico.informationtracer.com/superset/dashboard/12/
 
 [**General Functions of the Dashboard**](#general-functions-of-the-dashboard) |
 [**Graph Documentation**](#graph-documentation) | 
