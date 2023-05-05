@@ -107,8 +107,7 @@ git clone https://github.com/zhouhanc/superset-information-tracer.git
 crontab -e
 
 PATH=<...> # sync the path with system
-45 23 * * * python ~/superset-information-tracer/database_buildup.py
-/tmp/dashboard_log/monitor_$(date +\%Y\%m\%d_\%H\%M\%S).txt  # save dashboard building log
+45 23 * * * python ~/superset-information-tracer/database_buildup.py >> /tmp/dashboard_log/monitor_$(date +\%Y\%m\%d_\%H\%M\%S).txt
 # add empty line at the end to run
 
 # exit and view crontab job
