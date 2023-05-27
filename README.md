@@ -87,7 +87,7 @@ How we calculate the **weight of an edge** between node user-A and node hashtag-
 2. Sum up all interaction counts 
 3. Take the natural logarithm of the sum (why? the edge weight follows a logarithmic distribution. we take the log to visualize edges because the visualization tool assumes a linear weight distribution)
 
-The network graph is cumulative, and only shows edges with weight higher than average.
+The network graph is cumulative.
 
 ## Architecture
 ![image](https://user-images.githubusercontent.com/71556325/236377040-537f8e51-d1ee-45be-9107-49ea2d48ee17.png)
