@@ -47,7 +47,7 @@ def clean_text(sentence):
   
   return sentence
 
-def generate_wordcloud_table():
+def generate_wordcloud_table(query_dict):
 
 
   #read db configs
@@ -92,10 +92,10 @@ def generate_wordcloud_table():
   # generate wordcloud df
   wc=[]
   for platform in word_cloud_df['platform'].unique():
-    for candidate in word_cloud_df['candidate_name'].unique():
+    for candidate in query_dict.keys():
       all_text = ' '.join(word_cloud_df[(word_cloud_df['platform']==platform)&(word_cloud_df['candidate_name']==candidate)]['processed_text'])
       if all_text=='':
-        all_text='NADA'
+        all_text='_NADA_'
         print(platform, candidate, all_text)
       wordcloud = WordCloud(stopwords=stop_words).generate(all_text)
       # Get list of words in wordcloud
