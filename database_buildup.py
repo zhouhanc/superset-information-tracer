@@ -127,7 +127,7 @@ print('infotracer and sentiment table done')
 
 # wordcloud: daily update
 print('wordcloud table starts')
-generate_wordcloud_table()
+generate_wordcloud_table(query_dict=query_dict)
 print('wordcloud table done')
 
 # network: daily update
