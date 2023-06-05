@@ -137,7 +137,7 @@ with open(os.path.expanduser('~/youtube_tokens.txt'), 'r') as f:
         key, value = line.strip().split(',')
         API_KEY[key] = value
 
-API_KEY = list(API_KEY.values())
+API_KEY = list(API_KEY.values()) # list of tokens
 
 def search_replies(comment_id):
     headers = {
