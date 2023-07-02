@@ -37,6 +37,7 @@ from wordcloud import WordCloud
 
 # import functions from other files
 from helper import generate_helper_table
+from infotracer_and_sentiment import generate_infotracer_table
 from infotracer_and_sentiment import generate_infotracer_and_sentiment_table
 from wordcloud_table import generate_wordcloud_table
 from network_table import generate_network_table
@@ -106,27 +107,95 @@ print("the data collection is for the following candidates:", config["query_dict
 
 if config["date"]["predefined_period"]==True:
   # do historical data collection
+  print('##############################')
+  print("historical data collection")
 
 
   # helper: add historical data
   if config["generate_helper_table"]["run"]==True:
     try:
+      print('helper table starts')
       generate_helper_table(start_date = config["date"]["start_date"], 
                             end_date = config["date"]["end_date"], 
                             query_dict = config["query_dict"], 
                             config,
                             update_db=config["generate_helper_table"]["update_db"]
                             )
+      print('helper table ends')                      
     except Exception as e:
       print(f"An error occurred for helper table when updating historical data: {e}")
   
+
+  # infotracer: add historical data
+  # this should generally be false
+  if config["generate_infotracer_table"]["run"]==True:
+    try:
+      print('infotracer table starts')
+      generate_infotracer_table(start_date = config["date"]["start_date"], 
+                                end_date = config["date"]["end_date"], 
+                                query_dict = config["query_dict"], 
+                                config,
+                                update_db = config["generate_infotracer_table"]["update_db"]
+                                )
+      print('infotracer table ends')
+    except Exception as e:
+      print(f"An error occurred for infotracer table when updating historical data: {e}")
+
+
   # infotracer and sentiment: add historical data
+  # this collect and update two table
+  if config["generate_infotracer_and_sentiment_table"]["run"]==True:
+    try:
+      print('infotracer and sentiment table start')
+      generate_infotracer_and_sentiment_table(start_date = config["date"]["start_date"],
+                                              end_date = config["date"]["end_date"],  
+                                              ytb_end_date = config["date"]["end_date"],  
+                                              query_dict = config["query_dict"], 
+                                              config, 
+                                              update_db = config["generate_infotracer_and_sentiment_table"]["update_db"]
+                                              )
+      print('infotracer and sentiment table end')
+    except Exception as e:
+      print(f"An error occurred for infotracer and sentiment table when updating historical data: {e}")
+
+
+  # network: add historical data
+  if config["generate_network_table"]["run"]==True:
+    try:
+      print('network table starts')
+      generate_network_table(start_date = config["date"]["start_date"],
+                             end_date = config["date"]["end_date"],
+                             query_dict = config["query_dict"], 
+                             config, 
+                             update_db = config["generate_network_table"]["update_db"]
+                             )
+      print('network table ends')
+    except Exception as e:
+      print(f"An error occurred for network table when updating historical data: {e}")
+
+  # wordcloud: generate wordcloud using historical data
+  if config["generate_wordcloud_table"]["run"]==True:
+    try:
+      print('wordcloud table starts')
+      generate_network_table(start_date = config["date"]["start_date"],
+                             end_date = config["date"]["end_date"],
+                             query_dict = config["query_dict"], 
+                             config,
+                             update_db = config["generate_wordcloud_table"]["update_db"]
+                             )
+      print('wordcloud table ends')
+    except Exception as e:
+      print(f"An error occurred for wordcloud table when updating historical data: {e}")
+    
+    print("historical data collection ends")
+    print('##############################')
 
 
 
 else:
   # do daily data collection
-
+  print('##############################')
+  print('daily update starts')
 
 
 
@@ -136,13 +205,7 @@ else:
 
 
 
-# # infotracer and sentiment: add historical data
-# generate_infotracer_and_sentiment_table(start_date="2023-04-08",end_date="2023-04-16",ytb_end_date="2023-04-16",query_dict=query_dict,update_db=True)
-# # network: add historical data
-# generate_network_table(start_date="2023-04-08",end_date="2023-04-16",query_dict=query_dict,update_db=True)
-# # wordcloud
-# generate_wordcloud_table()
-# '''
+
 
 
 # """# Daily update"""
