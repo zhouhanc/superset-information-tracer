@@ -173,13 +173,12 @@ if config["date"]["predefined_period"]==True:
     except Exception as e:
       print(f"An error occurred for network table when updating historical data: {e}")
 
+
   # wordcloud: generate wordcloud using historical data
   if config["generate_wordcloud_table"]["run"]==True:
     try:
       print('wordcloud table starts')
-      generate_network_table(start_date = config["date"]["start_date"],
-                             end_date = config["date"]["end_date"],
-                             query_dict = config["query_dict"], 
+      generate_network_table(query_dict = config["query_dict"], 
                              config,
                              update_db = config["generate_wordcloud_table"]["update_db"]
                              )
@@ -197,66 +196,130 @@ else:
   print('##############################')
   print('daily update starts')
 
+  # helper: daily collect 
+  if config["generate_helper_table"]["run"]==True:
+    try:
+      print('helper table starts')
+
+      today = datetime.now(pytz.UTC).date()
+      tomorrow = datetime.now(pytz.UTC).date() + timedelta(days=1)
+
+      generate_helper_table(start_date = today, 
+                            end_date = tomorrow, 
+                            query_dict = config["query_dict"], 
+                            config,
+                            update_db=config["generate_helper_table"]["update_db"]
+                            )
+      print('helper table ends')                      
+    except Exception as e:
+      print(f"An error occurred for helper table when updating historical data: {e}")
+  
+
+  # infotracer: daily collect
+  # this should generally be false
+  if config["generate_infotracer_table"]["run"]==True:
+    try:
+      print('infotracer table starts')
+
+      today = datetime.now(pytz.UTC).date().strftime('%Y-%m-%d')
+      tomorrow = (datetime.now(pytz.UTC).date() + timedelta(days=1)).strftime('%Y-%m-%d')
+
+      generate_infotracer_table(start_date = today, 
+                                end_date = tomorrow, 
+                                query_dict = config["query_dict"], 
+                                config,
+                                update_db = config["generate_infotracer_table"]["update_db"]
+                                )
+      print('infotracer table ends')
+    except Exception as e:
+      print(f"An error occurred for infotracer table when updating historical data: {e}")
+
+
+  # infotracer and sentiment: daily collect
+  # this collect and update two table
+  if config["generate_infotracer_and_sentiment_table"]["run"]==True:
+    try:
+      print('infotracer and sentiment table start')
+
+      today = datetime.now(pytz.UTC).date().strftime('%Y-%m-%d')
+      tomorrow = (datetime.now(pytz.UTC).date() + timedelta(days=1)).strftime('%Y-%m-%d')
+
+      generate_infotracer_and_sentiment_table(start_date = today,
+                                              end_date = tomorrow,  
+                                              ytb_end_date = tomorrow,  
+                                              query_dict = config["query_dict"], 
+                                              config, 
+                                              update_db = config["generate_infotracer_and_sentiment_table"]["update_db"]
+                                              )
+      print('infotracer and sentiment table end')
+    except Exception as e:
+      print(f"An error occurred for infotracer and sentiment table when updating historical data: {e}")
+
+
+  # network: daily collect
+  if config["generate_network_table"]["run"]==True:
+    try:
+      print('network table starts')
+
+      today = datetime.now(pytz.UTC).date().strftime('%Y-%m-%d')
+      tomorrow = (datetime.now(pytz.UTC).date() + timedelta(days=1)).strftime('%Y-%m-%d')
+
+      generate_network_table(start_date = today,
+                             end_date = tomorrow,  
+                             query_dict = config["query_dict"], 
+                             config, 
+                             update_db = config["generate_network_table"]["update_db"]
+                             )
+      print('network table ends')
+    except Exception as e:
+      print(f"An error occurred for network table when updating historical data: {e}")
+
+
+  # wordcloud: generate wordcloud daily (use last n days from db, irrelavant to current date)
+  if config["generate_wordcloud_table"]["run"]==True:
+    try:
+      print('wordcloud table starts')
+      generate_network_table(query_dict = config["query_dict"], 
+                             config,
+                             update_db = config["generate_wordcloud_table"]["update_db"]
+                             )
+      print('wordcloud table ends')
+    except Exception as e:
+      print(f"An error occurred for wordcloud table when updating historical data: {e}")
+    
+
+    print("daily data collection ends")
+    print('##############################')
+
+
+
+  # do daily refresh
+  # This module removes data from the date 48 hours ago and recollects it because the data 
+  # becomes more stable after that time period. This ensures that we are working 
+  # with the most reliable data possible.
+  print('##############################')
+  print('##############################')
+  print('##############################')
+  print('daily update starts')
 
 
 
 
-  # then do dailiy refresh 
 
 
 
 
 
 
-# """# Daily update"""
-
-# print('##############################')
-# print('Update starts')
-
-# # helper: daily update
-# print('helper table starts')
-# today = datetime.now(pytz.timezone('America/Mexico_City')).date()
-# tomorrow=datetime.now(pytz.timezone('America/Mexico_City')).date() + timedelta(days=1)
-# generate_helper_table(start_date=tomorrow, end_date=tomorrow,query_dict=query_dict, update_db=True)
-# print('helper table done')
 
 
-# # infotracer and sentiment: daily update
-# print('infotracer and sentiment table start')
-# today = datetime.now(pytz.timezone('America/Mexico_City')).date().strftime('%Y-%m-%d')
-# tomorrow=(datetime.now(pytz.timezone('America/Mexico_City')).date() + timedelta(days=1)).strftime('%Y-%m-%d')
-# generate_infotracer_and_sentiment_table(start_date=today, end_date=tomorrow, ytb_end_date=tomorrow,query_dict=query_dict,update_db=True)
-# print('infotracer and sentiment table done')
 
-# # wordcloud: daily update
-# print('wordcloud table starts')
-# generate_wordcloud_table(query_dict=query_dict)
-# print('wordcloud table done')
-
-# # network: daily update
-# print('network table starts')
-# generate_network_table(start_date=today, end_date=tomorrow,query_dict=query_dict,update_db=True)
-# print('network table done')
-
-# print('Update ends')
-# print('##############################')
-
-
-# print('##############################')
-# print('##############################')
-# print('##############################')
-# print('##############################')
-# print('##############################')
 
 
 
 # """# Refresh old data"""
 
-# '''
-# This code removes data from the date 48 hours ago and recollects it because the data 
-# becomes more stable after that time period. This ensures that we are working 
-# with the most reliable data possible.
-# ''' 
+
 
 # print('##############################')
 # print('start refresh')
