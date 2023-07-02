@@ -20,6 +20,8 @@
 
 }, 
 
+"database_name": "name of db for this dashboard",
+
 "date":{
     "predefined_period":true, // if false, daily update
     "start_date": "2023-05-01",
