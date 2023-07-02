@@ -37,6 +37,8 @@
     "update_db":true
 },
 
+// this should generally be false
+// generate infotracer and sentiment table takes care of both 
 "generate_infotracer_table":{
     "run":true,
     "update_db":true
