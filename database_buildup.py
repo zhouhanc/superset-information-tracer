@@ -30,12 +30,12 @@ import itertools
 
 import re
 import string
-from nltk.stem.snowball import SnowballStemmer
+# from nltk.stem.snowball import SnowballStemmer
 import nltk
-from gensim import corpora, models
+# from gensim import corpora, models
 from wordcloud import WordCloud
 
-import functions from other files
+# import functions from other files
 from helper import generate_helper_table
 from infotracer_and_sentiment import generate_infotracer_and_sentiment_table
 from wordcloud_table import generate_wordcloud_table
@@ -62,9 +62,9 @@ mydb = mysql.connector.connect(
 mycursor = mydb.cursor()
 mycursor.execute("SHOW DATABASES")
 all_databases = mycursor.fetchall()
-print(all_databases)
-database_name = "morena_dashboard"
+print("all available databases:",all_databases)
 
+database_name = config["database_name"] 
 
 if (database_name,) not in all_databases:
   # create a db
@@ -89,6 +89,7 @@ if (database_name,) not in all_databases:
   # mycursor.execute("drop table if exists wordcloud")
   # mycursor.execute("drop table if exists network")
   # mycursor.execute("drop table if exists helper")
+  # mydb.commit()
 
 else: 
   print(database_name,"exists, skip building")
@@ -96,21 +97,44 @@ else:
 
 
 
+# start data collection
+print("the data collection is for the following candidates:", config["query_dict"].keys())
+
+
+# use config to choose: historical OR daily + refresh
+# each block should be surrounded by try except
+
+if config["date"]["predefined_period"]==True:
+  # do historical data collection
+
+
+  # helper: add historical data
+  if config["generate_helper_table"]["run"]==True:
+    try:
+      generate_helper_table(start_date = config["date"]["start_date"], 
+                            end_date = config["date"]["end_date"], 
+                            query_dict = config["query_dict"], 
+                            config,
+                            update_db=config["generate_helper_table"]["update_db"]
+                            )
+    except Exception as e:
+      print(f"An error occurred for helper table when updating historical data: {e}")
+  
+  # infotracer and sentiment: add historical data
+
+
+
+else:
+  # do daily data collection
 
 
 
 
-# query_dict={'Manolo Jiménez Salinas':'"Manolo Jimenez Salinas" OR "Manolo Jiménez Salinas" OR manolojim OR manolojimenezs OR Manolo.Jimenez.Salinas',
-#       'Armando Guadiana Tijerina':'"Armando Guadiana Tijerina" OR aguadiana OR armandoguadianatijerina OR ArmandoGuadianaTijerina',
-# 'Ricardo Mejía Berdeja':'"Ricardo Mejía Berdeja" OR "Ricardo Mejia Berdeja" OR RicardoMeb OR ricardomeb OR RicardoMejiaMx',
-#     'Lenin Pérez Rivera':'"Lenin Pérez Rivera" OR "Lenin Perez Rivera" OR leninperezr OR leninperezr OR leninperezr'
-# }
 
 
-# """# Historical"""
-# '''
-# # helper: add historical data
-# generate_helper_table(start_date="2023-04-09",end_date="2023-04-16",query_dict=query_dict, update_db=True)
+  # then do dailiy refresh 
+
+
 
 # # infotracer and sentiment: add historical data
 # generate_infotracer_and_sentiment_table(start_date="2023-04-08",end_date="2023-04-16",ytb_end_date="2023-04-16",query_dict=query_dict,update_db=True)
