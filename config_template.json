@@ -1,0 +1,61 @@
+
+{
+"db_info":{
+    "localhost": "mysql address",
+    "username":"root",
+    "pw": "password"
+},
+
+"infotracer_token": "your token",
+
+"youtube_token":{
+"name1":"token1",
+"name2":"token2"
+
+},
+
+"query_dict":{
+    "candidate1":"candidate1 keywords",
+    "candidate2":"candidate2 keywords"
+
+}, 
+
+"date":{
+    "predefined_period":true, // if false, daily update
+    "start_date": "2023-05-01",
+    "end_date":"2023-06-01"
+},
+
+// the following part is for debug, user don't need to modify
+// run true means run the data collection
+// update true means update the collected data to db
+
+"generate_helper_table":{
+    "run":true,
+    "update_db":true
+},
+
+"generate_infotracer_table":{
+    "run":true,
+    "update_db":true
+},
+
+"generate_infotracer_and_sentiment_table":{
+    "run":true,
+    "update_db":true
+},
+
+"generate_wordcloud_table":{
+    "last_n_days":14, // what range of data to use to generate wordcloud
+    "stop_word_file":"spanish", // language of stopword
+    "run":true,
+    "update_db":true
+},
+
+"generate_network_table":{
+    "run":true,
+    "update_db":true
+}
+
+
+}
