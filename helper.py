@@ -20,21 +20,27 @@ import itertools
 import re
 import string
 
+import json
+
+
+
 
 
 """#ELT helper table"""
 
-def generate_helper_table(start_date,end_date,query_dict,update_db=True):
+def generate_helper_table(start_date, end_date, query_dict, config, update_db=False):
   
 ##############################################################################
 ##  This function generates a helper table that is used to join with other table to fill in time gaps.
 ##  Records are inserted to table within function.
 ##############################################################################
 
+
   # Define platforms and labels
   platforms = ['facebook','twitter','instagram','youtube','youtube comment']
   labels = ['POS','NEU','NEG']
   candidate_name=list(query_dict.keys())
+  
   # Generate date range
   date_range = pd.date_range(start=start_date, end=end_date)
 
@@ -46,31 +52,27 @@ def generate_helper_table(start_date,end_date,query_dict,update_db=True):
 
 
   if update_db==True:
-  
-    #read db configs
-    with open(os.path.expanduser('~/db_info.txt'), 'r') as f:
-        lines = f.readlines()
 
-    localhost = lines[0].strip()
-    username = lines[1].strip()
-    pw = lines[2].strip()
-
-    #connect to database
+    # connect to database
     mydb = mysql.connector.connect(
-      host=localhost,
-      user=username,
-      password=pw
+      host=config["db_info"]["localhost"],
+      user=config["db_info"]["username"],
+      password=config["db_info"]["pw"]
     )
 
+
     mycursor = mydb.cursor()
+    database_name = config["database_name"] 
     # select database to modify
-    mycursor.execute("use dashboard")
+    mycursor.execute(f"CREATE DATABASE {database_name}")
 
     # Insert to db
     helper_data = helper_df.apply(tuple, axis=1).tolist()
-    # change order of column to fit df
-    query="insert into helper (datetime,platform,label, candidate_name) Values(%s,%s,%s,%s);" 
+
+    # change order of column to match df column order
+    query="insert into helper (datetime, platform, label, candidate_name) Values(%s,%s,%s,%s);" 
     mycursor.executemany(query,helper_data)
     mydb.commit()
+    mydb.close()
 
   return
