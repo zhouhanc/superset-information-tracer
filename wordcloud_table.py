@@ -24,16 +24,14 @@ import itertools
 
 import re
 import string
-from nltk.stem.snowball import SnowballStemmer
+# from nltk.stem.snowball import SnowballStemmer
 import nltk
-from gensim import corpora, models
+# from gensim import corpora, models
 from wordcloud import WordCloud
 
 
+# ETL data for wordcloud
 
-"""# ETL data for wordcloud
-
-"""
 
 def clean_text(sentence):
   # all lower-case
@@ -47,41 +45,42 @@ def clean_text(sentence):
   
   return sentence
 
-def generate_wordcloud_table(query_dict):
+def generate_wordcloud_table(query_dict, config, update_db=False):
 
 
-  #read db configs
-  with open(os.path.expanduser('~/db_info.txt'), 'r') as f:
-    lines = f.readlines()
-
-  localhost = lines[0].strip()
-  username = lines[1].strip()
-  pw = lines[2].strip()
-
-  #connect to database
+  # connect to database
   mydb = mysql.connector.connect(
-    host=localhost,
-    user=username,
-    password=pw
+    host=config["db_info"]["localhost"],
+    user=config["db_info"]["username"],
+    password=config["db_info"]["pw"]
   )
 
-  mycursor = mydb.cursor()
-  # select database to modify
-  mycursor.execute("use dashboard")
 
-  #query for data in last 14 days
-  wc_query= "SELECT processed_text, platform, candidate_name, datetime FROM sentiment WHERE datetime >= DATE_SUB(NOW(), INTERVAL 14 DAY) "
+  mycursor = mydb.cursor()
+  database_name = config["database_name"] 
+  # select database to modify
+  mycursor.execute(f"USE {database_name}")
+
+
+  
+  # read time and language config 
+  last_n_days = config["generate_wordcloud_table"]["last_n_days"]
+  stop_word_file = config["generate_wordcloud_table"]["stop_word_file"]
+
+
+  #query for data in last_n_days
+  wc_query= f"SELECT processed_text, platform, candidate_name, datetime FROM sentiment WHERE datetime >= DATE_SUB(NOW(), INTERVAL {last_n_days} DAY) "
   word_cloud_df= pd.read_sql_query(wc_query, mydb)
   
   #process text
   word_cloud_df['processed_text']=word_cloud_df['processed_text'].apply(lambda x: clean_text(x))
 
-
   # stop words
   
-  with open(os.path.expanduser('~/spanish.txt'), 'r') as f:
-    spanish_stopwords = [line.strip() for line in f]
-  stop_words = set(spanish_stopwords)
+  with open(os.path.expanduser(f'~/{stop_word_file}.txt'), 'r') as f:
+    stopwords = [line.strip() for line in f]
+
+  stop_words = set(stopwords)
   stop_words.add('emoji') 
   stop_words.add('http')
   stop_words.add('youtube')
@@ -95,7 +94,7 @@ def generate_wordcloud_table(query_dict):
     for candidate in query_dict.keys():
       all_text = ' '.join(word_cloud_df[(word_cloud_df['platform']==platform)&(word_cloud_df['candidate_name']==candidate)]['processed_text'])
       if all_text=='':
-        all_text='_NADA_'
+        all_text='_nothing_to_show_'
         print(platform, candidate, all_text)
       wordcloud = WordCloud(stopwords=stop_words).generate(all_text)
       # Get list of words in wordcloud
@@ -107,18 +106,20 @@ def generate_wordcloud_table(query_dict):
   wc=pd.concat(wc)
   print('shape of wordcloud is',wc.shape)
 
-  # empty the table
-  print('empty the table')
-  mycursor.execute(f'DELETE FROM wordcloud')
-  mydb.commit()
+  if update_db == True:
+    # empty the table
+    print('empty the table')
+    mycursor.execute(f'DELETE FROM wordcloud')
+    mydb.commit()
 
-  # insert to db last 14 days data
-  print('start inserting')
-  wc_data = wc.apply(tuple, axis=1).tolist()
-  query="insert into wordcloud (word,weight, platform, candidate_name) Values(%s,%s,%s,%s);" 
-  mycursor.executemany(query,wc_data)
-  print('done')
+    # insert to db last_n_days data
+    print('start inserting')
+    wc_data = wc.apply(tuple, axis=1).tolist()
+    query="insert into wordcloud (word, weight, platform, candidate_name) Values(%s,%s,%s,%s);" 
+    mycursor.executemany(query,wc_data)
+    print('done')
 
-  mydb.commit()
+    mydb.commit()
+    mydb.close()
 
   return
