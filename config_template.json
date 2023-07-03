@@ -61,6 +61,8 @@
     "update_db":true
 },
 // turn on of off daily refresh
-"refresh": true
+"refresh": {
+    "run": true,
+    "update_db": true
 
 }
