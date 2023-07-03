@@ -189,10 +189,10 @@ if config["date"]["predefined_period"]==True:
   if config["generate_wordcloud_table"]["run"]==True:
     try:
       print('wordcloud table starts')
-      generate_network_table(query_dict = config["query_dict"], 
-                             config=config,
-                             update_db = config["generate_wordcloud_table"]["update_db"]
-                             )
+      generate_wordcloud_table(query_dict = config["query_dict"], 
+                               config=config,
+                               update_db = config["generate_wordcloud_table"]["update_db"]
+                               )
       print('wordcloud table ends')
     except Exception as e:
       print(f"An error occurred for wordcloud table when updating historical data: {e}")
@@ -290,10 +290,10 @@ else:
   if config["generate_wordcloud_table"]["run"]==True:
     try:
       print('wordcloud table starts')
-      generate_network_table(query_dict = config["query_dict"], 
-                             config=config,
-                             update_db = config["generate_wordcloud_table"]["update_db"]
-                             )
+      generate_wordcloud_table(query_dict = config["query_dict"], 
+                              config=config,
+                              update_db = config["generate_wordcloud_table"]["update_db"]
+                              )
       print('wordcloud table ends')
     except Exception as e:
       print(f"An error occurred for wordcloud table when updating historical data: {e}")
