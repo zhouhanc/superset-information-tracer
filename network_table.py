@@ -104,8 +104,7 @@ def generate_network_table(start_date, end_date, query_dict, config, update_db=T
     })
     nw_df['source_datetime']=pd.to_datetime(nw_df['source_datetime'])
     nw_df['target_datetime']=pd.to_datetime(nw_df['target_datetime'])
-    nw_df['source_datetime']=convert_time(nw_df['source_datetime'])
-    nw_df['target_datetime']=convert_time(nw_df['target_datetime'])
+
 
     nw_df['candidate_name']=candidate
 	
