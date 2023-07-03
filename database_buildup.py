@@ -87,6 +87,8 @@ if (database_name,) not in all_databases:
 
 else: 
   print(database_name,"exists")
+  # select database to modify
+  mycursor.execute("USE {}".format(database_name))
 
   if config["delete_all_table_and_restart"] == True:
     # delete table
@@ -319,6 +321,9 @@ else:
     print("start deleting old data")
 
     two_days_ago = (datetime.now(pytz.UTC).date() - timedelta(days=2)).strftime('%Y-%m-%d')
+
+    # select database to modify
+    mycursor.execute("USE {}".format(database_name))
 
     # Create the SQL query to delete records during the day two days ago
     sentiment_query = "DELETE FROM sentiment WHERE DATE(datetime) = '{}'".format(two_days_ago)
