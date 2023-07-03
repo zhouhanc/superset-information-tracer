@@ -1,6 +1,3 @@
-git clone https://github.com/zhouhanc/superset-information-tracer.git
-git fetch
-git checkout -b new_spanish origin/new_spanish
 
 
 pip install --upgrade pip
