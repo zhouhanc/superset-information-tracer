@@ -300,49 +300,50 @@ else:
   print('##############################')
   print('##############################')
   print('##############################')
-  print('daily update starts')
+
+  if config["refresh"]["run"]==True:
+    print('daily refresh starts')
+
+    # delete old data from db
+    print("start deleting old data")
+
+    two_days_ago = (datetime.now(pytz.UTC).date() - timedelta(days=2)).strftime('%Y-%m-%d')
+
+    # Create the SQL query to delete records during the day two days ago
+    sentiment_query = "DELETE FROM sentiment WHERE DATE(datetime) = '{}'".format(two_days_ago)
+    infotracer_query = "DELETE FROM infotracer WHERE DATE(datetime) = '{}'".format(two_days_ago)
+
+    mycursor.execute(infotracer_query)
+    mycursor.execute(sentiment_query)
+
+    mydb.commit()
+
+    print('old data deleted')
 
 
+    # recollect to refresh
+    
+    print('start recollect')
+
+  
+    try:
+      print('infotracer and sentiment table start')
+
+      generate_infotracer_and_sentiment_table(start_date = two_days_ago, 
+                                              end_date = two_days_ago,
+                                              ytb_end_date = two_days_ago,  
+                                              query_dict = config["query_dict"], 
+                                              config, 
+                                              update_db = config["refresh"]["update_db"]
+                                              )
+      print('infotracer and sentiment table end')
+    except Exception as e:
+      print(f"An error occurred for infotracer and sentiment table when updating historical data: {e}")
 
 
+    print('recollect end')
 
-
-
-
-
-
-
-
-
-
-
-
-# """# Refresh old data"""
-
-
-
-# print('##############################')
-# print('start refresh')
-# two_days_ago=(datetime.now(pytz.timezone('America/Mexico_City')).date() - timedelta(days=2)).strftime('%Y-%m-%d')
-# three_days_ago=(datetime.now(pytz.timezone('America/Mexico_City')).date() - timedelta(days=3)).strftime('%Y-%m-%d')
-
-# # delete
-# # data in db is mexico timezone
-# infotracer_query="DELETE FROM infotracer WHERE datetime >= '"+three_days_ago+" 18:00:00' AND datetime <= '"+two_days_ago+" 18:00:00'"
-# sentiment_query="DELETE FROM sentiment WHERE datetime >= '"+three_days_ago+" 18:00:00' AND datetime <= '"+two_days_ago+" 18:00:00'"
-
-# mycursor.execute(infotracer_query)
-# mycursor.execute(sentiment_query)
-
-# mydb.commit()
-# print('old data deleted')
-
-# # recollect
-# print('start recollect')
-# generate_infotracer_and_sentiment_table(start_date=two_days_ago, end_date=two_days_ago, ytb_end_date=two_days_ago, query_dict=query_dict,update_db=True)
-# print('recollect end')
-
-# print('refresh ends')
-# print('##############################')
+    print('refresh ends')
+    print('##############################')
 
 
