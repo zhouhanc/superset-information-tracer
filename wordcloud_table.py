@@ -75,11 +75,12 @@ def generate_wordcloud_table(query_dict, config, update_db=False):
   word_cloud_df= pd.read_sql_query(wc_query, mydb)
   
   #process text
-  word_cloud_df['processed_text']=word_cloud_df['processed_text'].apply(lambda x: clean_text(x))
+  # word_cloud_df['processed_text']=word_cloud_df['processed_text'].apply(lambda x: clean_text(x))
+  word_cloud_df['text']=word_cloud_df['text'].apply(lambda x: clean_text(x))
 
   # stop words
   
-  with open(os.path.expanduser(f'{stop_word_file}.txt'), 'r') as f:
+  with open(f'{stop_word_file}.txt', 'r') as f:
     stopwords = [line.strip() for line in f]
 
   stop_words = set(stopwords)
