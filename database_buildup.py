@@ -67,6 +67,7 @@ print("all available databases:",all_databases)
 
 database_name = config["database_name"] 
 
+
 if (database_name,) not in all_databases:
   # create a db
   mycursor.execute(f"CREATE DATABASE {database_name}")
@@ -84,16 +85,28 @@ if (database_name,) not in all_databases:
   mycursor.execute("create table network (source varchar(255), target varchar(255), weight float, source_cat varchar(255), target_cat varchar(255), source_datetime timestamp, target_datetime timestamp, candidate_name varchar(255))")
   mycursor.execute("create table helper (datetime timestamp,candidate_name varchar(255),label varchar(255),platform varchar(255))")
  
-  # delete table
-  # mycursor.execute("drop table if exists infotracer")
-  # mycursor.execute("drop table if exists sentiment")
-  # mycursor.execute("drop table if exists wordcloud")
-  # mycursor.execute("drop table if exists network")
-  # mycursor.execute("drop table if exists helper")
-  # mydb.commit()
+
 
 else: 
-  print(database_name,"exists, skip building")
+  print(database_name,"exists")
+
+  if config["delete_all_table_and_restart"] == True:
+    # delete table
+    mycursor.execute("drop table if exists infotracer")
+    mycursor.execute("drop table if exists sentiment")
+    mycursor.execute("drop table if exists wordcloud")
+    mycursor.execute("drop table if exists network")
+    mycursor.execute("drop table if exists helper")
+    mydb.commit()
+
+    # recreate table and schema
+    mycursor.execute("create table infotracer (candidate_name varchar(255), text MediumTEXT, username varchar(255), num_interaction int, datetime timestamp, platform varchar(255) )")
+    mycursor.execute("create table sentiment (text MediumTEXT, processed_text MediumTEXT, positive float, neutral float, negative float, label varchar(255),candidate_name varchar(255), platform varchar(255), username varchar(255), num_interaction int, datetime timestamp )")
+    mycursor.execute("create table wordcloud (word varchar(255), weight float, candidate_name varchar(255),platform varchar(255))")
+    mycursor.execute("create table network (source varchar(255), target varchar(255), weight float, source_cat varchar(255), target_cat varchar(255), source_datetime timestamp, target_datetime timestamp, candidate_name varchar(255))")
+    mycursor.execute("create table helper (datetime timestamp,candidate_name varchar(255),label varchar(255),platform varchar(255))")
+  
+
 
 
 
