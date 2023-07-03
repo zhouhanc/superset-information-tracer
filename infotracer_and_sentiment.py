@@ -24,40 +24,30 @@ import itertools
 
 import re
 import string
-from nltk.stem.snowball import SnowballStemmer
+# from nltk.stem.snowball import SnowballStemmer
 import nltk
-from gensim import corpora, models
+# from gensim import corpora, models
 
 
 
 """# ETL for infotracer table"""
 
-def convert_time(column):
+# DEPRECATED all convert time: do not need to adjust time zone within script. can adjust in superset
 
-##############################################################################
-##  This function takes the datetime column of any dataframe 
-##  and convert utc time to mexico time.
-##  This function is part of another function. DO NOT run directly.
-##############################################################################
 
-  column=column.apply(lambda x: pytz.utc.localize(x))
-  #utc to mexico time
-  mexico_tz = timezone('America/Mexico_City')
-  convert_timestamp = lambda x: x.astimezone(mexico_tz).replace(tzinfo=None)
-  column = column.apply(convert_timestamp)
-  return column
 
-def generate_infotracer_table(start_date,end_date,query_dict,update_db=True):
+
+def generate_infotracer_table(start_date, end_date, query_dict, config, update_db=False):
 
 ########################################################################################
-##  This function query data using information tracer, store in df, convert time and insert
-##  data into information tracer table. It returns a df of qury result. This result will be used for sentiment analysis.
+##  This function query data using information tracer, store in df and insert
+##  data into information tracer table. It returns a df of query result. 
+##  This result will be used for sentiment analysis.
 ##  This function is part of another function. DO NOT run directly.
 ########################################################################################
 
   # information tracer token
-  with open(os.path.expanduser('~/infotracer_token.txt'), 'r') as f:
-      your_token = f.read()
+  your_token=config["infotracer_token"]
 
   # query with information tracer api
   df=[]
@@ -76,44 +66,38 @@ def generate_infotracer_table(start_date,end_date,query_dict,update_db=True):
 
   df=pd.concat(df)
   df=df.rename(columns={'d':'text','i':'num_interaction','n':'username','t':'datetime'})
-
-  # convert timezone
-  df['datetime'] = convert_time(df['datetime'])
   df=df.drop_duplicates()
 
   print('#################################################')
-  print('the shape of infotracer table is:',df.shape)
+  print('the shape of infotracer table is:', df.shape)
   print('#################################################')
 
   if update_db==True:
   
-    #read db configs
-    with open(os.path.expanduser('~/db_info.txt'), 'r') as f:
-        lines = f.readlines()
-
-    localhost = lines[0].strip()
-    username = lines[1].strip()
-    pw = lines[2].strip()
-
-    #connect to database
+    # connect to database
     mydb = mysql.connector.connect(
-      host=localhost,
-      user=username,
-      password=pw
+      host=config["db_info"]["localhost"],
+      user=config["db_info"]["username"],
+      password=config["db_info"]["pw"]
     )
 
+
     mycursor = mydb.cursor()
+    database_name = config["database_name"] 
     # select database to modify
-    mycursor.execute("use dashboard")
+    mycursor.execute(f"USE {database_name}")
+
 
     # insert to db
     infotracer_data = df.apply(tuple, axis=1).tolist()
     query="insert into infotracer (text,num_interaction,username,datetime,platform,candidate_name) Values(%s,%s,%s,%s,%s,%s);"
-    mycursor.executemany(query,infotracer_data)
+    mycursor.executemany(query, infotracer_data)
 
     mydb.commit()
+    mydb.close()
     # return query result
   return df
+
 
 """# ETL data for sentiment table
 
@@ -241,18 +225,7 @@ def search_comments(video_id):
     # save results    
     return results
 
-def convert_time_ytb(column):
-##############################################################################
-##  This function takes the datetime column of any dataframe 
-##  and convert utc time to mexico time. For ytb comment only.
-##  This function is part of another function. DO NOT run directly.
-##############################################################################
 
-  #utc to mexico time
-  mexico_tz = timezone('America/Mexico_City')
-  convert_timestamp = lambda x: x.astimezone(mexico_tz).replace(tzinfo=None)
-  column = column.apply(convert_timestamp)
-  return column
 
 """## youtube query"""
 
@@ -397,7 +370,7 @@ def sent_analyze(df):
   df['negative']=neg_prob
   return df
 
-def generate_infotracer_and_sentiment_table(start_date,end_date,ytb_end_date,query_dict, update_db=True):
+def generate_infotracer_and_sentiment_table(start_date, end_date, ytb_end_date, query_dict, config, update_db=True):
 
 ###########################################################################
 ## This function generates both infotracer and sentiment table.
