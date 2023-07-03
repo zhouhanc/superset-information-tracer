@@ -73,7 +73,8 @@ if (database_name,) not in all_databases:
   # mycursor.execute(f"DROP DATABASE {database_name}")
 
   # select database to modify
-  mycursor.execute(f"USE {database_name}")
+  mycursor.execute("USE {}".format(database_name))
+
 
   # create table and schema
   mycursor.execute("create table infotracer (candidate_name varchar(255), text MediumTEXT, username varchar(255), num_interaction int, datetime timestamp, platform varchar(255) )")
