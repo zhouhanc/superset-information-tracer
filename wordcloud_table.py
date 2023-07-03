@@ -77,7 +77,7 @@ def generate_wordcloud_table(query_dict, config, update_db=False):
 
   # stop words
   
-  with open(os.path.expanduser(f'~/{stop_word_file}.txt'), 'r') as f:
+  with open(os.path.expanduser(f'{stop_word_file}.txt'), 'r') as f:
     stopwords = [line.strip() for line in f]
 
   stop_words = set(stopwords)
