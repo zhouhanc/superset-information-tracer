@@ -59,7 +59,8 @@
 "generate_network_table":{
     "run":true,
     "update_db":true
-}
-
+},
+// turn on of off daily refresh
+"refresh": true
 
 }
