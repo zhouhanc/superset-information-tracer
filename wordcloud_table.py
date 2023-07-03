@@ -69,7 +69,9 @@ def generate_wordcloud_table(query_dict, config, update_db=False):
 
 
   #query for data in last_n_days
-  wc_query= f"SELECT processed_text, platform, candidate_name, datetime FROM sentiment WHERE datetime >= DATE_SUB(NOW(), INTERVAL {last_n_days} DAY) "
+  # wc_query= f"SELECT processed_text, platform, candidate_name, datetime FROM sentiment WHERE datetime >= DATE_SUB(NOW(), INTERVAL {last_n_days} DAY) "
+  wc_query= f"SELECT text, platform, candidate_name, datetime FROM infotracer WHERE datetime >= DATE_SUB(NOW(), INTERVAL {last_n_days} DAY) "
+
   word_cloud_df= pd.read_sql_query(wc_query, mydb)
   
   #process text
