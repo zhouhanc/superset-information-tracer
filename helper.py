@@ -64,7 +64,7 @@ def generate_helper_table(start_date, end_date, query_dict, config, update_db=Fa
     mycursor = mydb.cursor()
     database_name = config["database_name"] 
     # select database to modify
-    mycursor.execute(f"CREATE DATABASE {database_name}")
+    mycursor.execute(f"USE {database_name}")
 
     # Insert to db
     helper_data = helper_df.apply(tuple, axis=1).tolist()
