@@ -95,7 +95,8 @@ def generate_wordcloud_table(query_dict, config, update_db=False):
   wc=[]
   for platform in word_cloud_df['platform'].unique():
     for candidate in query_dict.keys():
-      all_text = ' '.join(word_cloud_df[(word_cloud_df['platform']==platform)&(word_cloud_df['candidate_name']==candidate)]['processed_text'])
+      # all_text = ' '.join(word_cloud_df[(word_cloud_df['platform']==platform)&(word_cloud_df['candidate_name']==candidate)]['processed_text'])
+      all_text = ' '.join(word_cloud_df[(word_cloud_df['platform']==platform)&(word_cloud_df['candidate_name']==candidate)]['text'])
       if all_text=='':
         all_text='_nothing_to_show_'
         print(platform, candidate, all_text)
