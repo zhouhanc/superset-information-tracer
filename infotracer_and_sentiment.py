@@ -358,7 +358,7 @@ def text_process(df):
 
 # do sentiment analysis in batches
 def sent_analyze(df):
-  batch=32
+  batch=8
   analyzer = create_analyzer(task="sentiment", lang="es", batch_size=batch)
 
   text=df['processed_text'].tolist() #list of texts
@@ -373,7 +373,7 @@ def sent_analyze(df):
     pos_prob+=[r.probas['POS'] for r in analyze_result]
     neu_prob+=[r.probas['NEU'] for r in analyze_result]
     neg_prob+=[r.probas['NEG'] for r in analyze_result]
-    print("Batch {} done".format(int(i/32)))
+    print("Batch {} done".format(int(i/8)))
 
   df['label']=label
   df['positive']=pos_prob
