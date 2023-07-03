@@ -286,7 +286,7 @@ def query_youtube_comment(start_date, end_date, query_dict, config):
 
 
 
-"""## text process functions"""
+## text process functions
 
 # remove \n and ...
 def remove_n(df):
@@ -407,7 +407,8 @@ def generate_infotracer_and_sentiment_table(start_date, end_date, ytb_end_date, 
   ytbcomment_df=query_youtube_comment(start_date=start_date,
                                       end_date=ytb_end_date,
                                       query_dict=query_dict,
-                                      config=config)
+                                      config=config
+                                      )
 
   # merge results
   # text for sentiment table: everything in df + used youtube raw data to extract comment
@@ -428,24 +429,19 @@ def generate_infotracer_and_sentiment_table(start_date, end_date, ytb_end_date, 
   
   if update_db==True:
 
-    #read db configs
-    with open(os.path.expanduser('~/db_info.txt'), 'r') as f:
-          lines = f.readlines()
-
-    localhost = lines[0].strip()
-    username = lines[1].strip()
-    pw = lines[2].strip()
-
-    #connect to database
+    # connect to database
     mydb = mysql.connector.connect(
-      host=localhost,
-      user=username,
-      password=pw
+      host=config["db_info"]["localhost"],
+      user=config["db_info"]["username"],
+      password=config["db_info"]["pw"]
     )
 
+
     mycursor = mydb.cursor()
+    database_name = config["database_name"] 
     # select database to modify
-    mycursor.execute("use dashboard")
+    mycursor.execute(f"USE {database_name}")
+
 
     # commit full sentiment to sentiment table in db
     sent_data = full_sentiment.apply(tuple, axis=1).tolist()
@@ -453,5 +449,6 @@ def generate_infotracer_and_sentiment_table(start_date, end_date, ytb_end_date, 
     mycursor.executemany(query,sent_data)
 
     mydb.commit()
+    mydb.close()
 
   return
