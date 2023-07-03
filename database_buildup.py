@@ -131,7 +131,7 @@ if config["date"]["predefined_period"]==True:
       generate_helper_table(start_date = config["date"]["start_date"], 
                             end_date = config["date"]["end_date"], 
                             query_dict = config["query_dict"], 
-                            config,
+                            config=config,
                             update_db=config["generate_helper_table"]["update_db"]
                             )
       print('helper table ends')                      
@@ -147,7 +147,7 @@ if config["date"]["predefined_period"]==True:
       generate_infotracer_table(start_date = config["date"]["start_date"], 
                                 end_date = config["date"]["end_date"], 
                                 query_dict = config["query_dict"], 
-                                config,
+                                config=config,
                                 update_db = config["generate_infotracer_table"]["update_db"]
                                 )
       print('infotracer table ends')
@@ -164,7 +164,7 @@ if config["date"]["predefined_period"]==True:
                                               end_date = config["date"]["end_date"],  
                                               ytb_end_date = config["date"]["end_date"],  
                                               query_dict = config["query_dict"], 
-                                              config, 
+                                              config=config,
                                               update_db = config["generate_infotracer_and_sentiment_table"]["update_db"]
                                               )
       print('infotracer and sentiment table end')
@@ -179,7 +179,7 @@ if config["date"]["predefined_period"]==True:
       generate_network_table(start_date = config["date"]["start_date"],
                              end_date = config["date"]["end_date"],
                              query_dict = config["query_dict"], 
-                             config, 
+                             config=config,
                              update_db = config["generate_network_table"]["update_db"]
                              )
       print('network table ends')
@@ -192,7 +192,7 @@ if config["date"]["predefined_period"]==True:
     try:
       print('wordcloud table starts')
       generate_network_table(query_dict = config["query_dict"], 
-                             config,
+                             config=config,
                              update_db = config["generate_wordcloud_table"]["update_db"]
                              )
       print('wordcloud table ends')
@@ -220,7 +220,7 @@ else:
       generate_helper_table(start_date = today, 
                             end_date = tomorrow, 
                             query_dict = config["query_dict"], 
-                            config,
+                            config=config,
                             update_db=config["generate_helper_table"]["update_db"]
                             )
       print('helper table ends')                      
@@ -240,7 +240,7 @@ else:
       generate_infotracer_table(start_date = today, 
                                 end_date = tomorrow, 
                                 query_dict = config["query_dict"], 
-                                config,
+                                config=config,
                                 update_db = config["generate_infotracer_table"]["update_db"]
                                 )
       print('infotracer table ends')
@@ -261,7 +261,7 @@ else:
                                               end_date = tomorrow,  
                                               ytb_end_date = tomorrow,  
                                               query_dict = config["query_dict"], 
-                                              config, 
+                                              config=config,
                                               update_db = config["generate_infotracer_and_sentiment_table"]["update_db"]
                                               )
       print('infotracer and sentiment table end')
@@ -280,7 +280,7 @@ else:
       generate_network_table(start_date = today,
                              end_date = tomorrow,  
                              query_dict = config["query_dict"], 
-                             config, 
+                             config=config,
                              update_db = config["generate_network_table"]["update_db"]
                              )
       print('network table ends')
@@ -293,7 +293,7 @@ else:
     try:
       print('wordcloud table starts')
       generate_network_table(query_dict = config["query_dict"], 
-                             config,
+                             config=config,
                              update_db = config["generate_wordcloud_table"]["update_db"]
                              )
       print('wordcloud table ends')
@@ -346,7 +346,7 @@ else:
                                               end_date = two_days_ago,
                                               ytb_end_date = two_days_ago,  
                                               query_dict = config["query_dict"], 
-                                              config, 
+                                              config=config,
                                               update_db = config["refresh"]["update_db"]
                                               )
       print('infotracer and sentiment table end')
