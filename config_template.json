@@ -22,6 +22,8 @@
 
 "database_name": "name of db for this dashboard",
 
+"delete_all_table_and_restart": false,
+
 "date":{
     "predefined_period":true, // if false, daily update
     "start_date": "2023-05-01",
