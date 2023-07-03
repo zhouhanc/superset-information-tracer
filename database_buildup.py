@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
 
-# !pip install mysql-connector-python
-# !pip install informationtracer
-# !pip install pysentimiento
-
 """# Import"""
 
 import os
@@ -22,8 +18,8 @@ from datetime import datetime
 from datetime import date
 from datetime import datetime, timedelta
 
-from pysentimiento.preprocessing import preprocess_tweet
-from pysentimiento import create_analyzer
+# from pysentimiento.preprocessing import preprocess_tweet
+# from pysentimiento import create_analyzer
 
 
 import itertools
@@ -70,7 +66,8 @@ database_name = config["database_name"]
 
 if (database_name,) not in all_databases:
   # create a db
-  mycursor.execute(f"CREATE DATABASE {database_name}")
+  mycursor.execute("CREATE DATABASE {}".format(database_name))
+  
 
   # drop a db
   # mycursor.execute(f"DROP DATABASE {database_name}")
