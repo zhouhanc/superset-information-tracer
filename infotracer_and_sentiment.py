@@ -35,8 +35,6 @@ import nltk
 # DEPRECATED all convert time: do not need to adjust time zone within script. can adjust in superset
 
 
-
-
 def generate_infotracer_table(start_date, end_date, query_dict, config, update_db=False):
 
 ########################################################################################
@@ -53,7 +51,12 @@ def generate_infotracer_table(start_date, end_date, query_dict, config, update_d
   df=[]
 
   for candidate, query in query_dict.items():
-    id_hash256 = informationtracer.trace(query=query, token=your_token, start_date=start_date, end_date=end_date, skip_result=True)
+    id_hash256 = informationtracer.trace(query=query, 
+                                         token=your_token, 
+                                         start_date=start_date, 
+                                         end_date=end_date, 
+                                         skip_result=True
+                                         )
     url = "https://informationtracer.com/api/v1/result?token={}&id_hash256={}".format(your_token, id_hash256)
     results = requests.get(url).json() #will get json for all data of keyword, results is a dictionary
 
@@ -95,14 +98,15 @@ def generate_infotracer_table(start_date, end_date, query_dict, config, update_d
 
     mydb.commit()
     mydb.close()
+
     # return query result
   return df
 
 
-"""# ETL data for sentiment table
+# ETL data for sentiment table
 
 ## youtube comment functions
-"""
+
 
 ##############################################################################
 ##  NOTE: register youtube API key!
@@ -113,17 +117,9 @@ def generate_infotracer_table(start_date, end_date, query_dict, config, update_d
 ##  One key is enough, more keys can speed up the data collection process
 #############################################################################
 
-# read a dictionary of names and values of youtube api key 
-API_KEY= {}
 
-with open(os.path.expanduser('~/youtube_tokens.txt'), 'r') as f:
-    for line in f:
-        key, value = line.strip().split(',')
-        API_KEY[key] = value
 
-API_KEY = list(API_KEY.values())
-
-def search_replies(comment_id):
+def search_replies(comment_id, API_KEY):
     headers = {
         'Accept': 'application/json',
     }    
@@ -145,7 +141,7 @@ def search_replies(comment_id):
         return results
 
     results += [item for item in response.json()['items']]
-#     print(results)
+
     nextPageToken = response.json().get('nextPageToken', None)
     
     while nextPageToken:
@@ -173,7 +169,7 @@ def search_replies(comment_id):
 
 
 
-def search_comments(video_id):        
+def search_comments(video_id, API_KEY):        
     headers = {
         'Accept': 'application/json',
     }    
@@ -219,7 +215,7 @@ def search_comments(video_id):
     for i in results:
         if i['snippet']['totalReplyCount'] > 5:
             print('hydrating more comments...')
-            i['replies']['comments'] = search_replies(i['id'])
+            i['replies']['comments'] = search_replies(i['id'], API_KEY)
             print(len(i['replies']['comments']))
 
     # save results    
@@ -229,21 +225,27 @@ def search_comments(video_id):
 
 """## youtube query"""
 
-def query_youtube_comment(start_date,end_date,query_dict):
+def query_youtube_comment(start_date, end_date, query_dict, config):
 ##############################################################################
 ##  This function use information tracer result to query for youtube comment, 
 ##  and convert utc time to mexico time.
 ##  This function is part of another function. DO NOT run directly.
 ##############################################################################
+  
+  # read youtube api key, infotracer token from config
+  API_KEY = list(config["youtube_token"].values())
 
-  # information tracer token
-  with open(os.path.expanduser('~/infotracer_token.txt'), 'r') as f:
-      your_token = f.read()
+  your_token = config["infotracer_token"]
 
   # get video id from information tracer source data
   videoId_dic={}
   for candidate, query in query_dict.items():
-    id_hash256 = informationtracer.trace(query=query, token=your_token, start_date=start_date, end_date=end_date,skip_result=True)
+    id_hash256 = informationtracer.trace(query=query, 
+                                         token=your_token, 
+                                         start_date=start_date, 
+                                         end_date=end_date,
+                                         skip_result=True
+                                         )
     url="https://informationtracer.com/loadsource?source={}&id_hash256={}&token={}".format('youtube', id_hash256, your_token)
     results=requests.get(url).json()
     videoId_dic[candidate] = [data['id']['videoId'] for data in results] 
@@ -257,7 +259,7 @@ def query_youtube_comment(start_date,end_date,query_dict):
     date=[]
     for vid in videoId_list:
       if vid!=[]:
-        result=search_comments(vid)
+        result=search_comments(vid, API_KEY)
         for i in np.arange(0,len(result),1):
           comment.append(result[i]['snippet']['topLevelComment']['snippet']['textDisplay'])
           username.append(result[i]['snippet']['topLevelComment']['snippet']['authorDisplayName'])
@@ -272,9 +274,7 @@ def query_youtube_comment(start_date,end_date,query_dict):
   ytbcomment_df=pd.concat(ytbcomment_df)
   
 
-  # convert timezone
   if ytbcomment_df.empty==False:
-    ytbcomment_df['datetime'] = convert_time_ytb(ytbcomment_df['datetime'])
     ytbcomment_df=ytbcomment_df.drop_duplicates()
 
   print('#################################################')
@@ -282,6 +282,9 @@ def query_youtube_comment(start_date,end_date,query_dict):
   print('#################################################')
   # return query result
   return ytbcomment_df
+
+
+
 
 """## text process functions"""
 
@@ -291,6 +294,7 @@ def remove_n(df):
   df['text'] = df['text'].str.replace(r'\.{2,}', '.', regex=True)
   return df
   
+
 # parse
 def parse(df):
   print('#################################################')
@@ -319,6 +323,8 @@ def parse(df):
   parsed_df=pd.concat(parsed_df)
   return parsed_df
 
+
+
 # Define a function to restore spanish accents
 def replace_special_chars(text):
   text = re.sub(r'\\u([\da-fA-F]{4})', lambda m: chr(int(m.group(1), 16)), text)
@@ -333,6 +339,9 @@ def replace_special_chars(text):
   # return ' '.join(stemmed_words)
   return text
 
+
+
+
 def text_process(df):
   # restore accent
   df['text'] = df['text'].apply(replace_special_chars)
@@ -342,6 +351,8 @@ def text_process(df):
   # other steps
 
   return df
+
+
 
 """## sentiment analysis function"""
 
@@ -370,6 +381,9 @@ def sent_analyze(df):
   df['negative']=neg_prob
   return df
 
+
+
+
 def generate_infotracer_and_sentiment_table(start_date, end_date, ytb_end_date, query_dict, config, update_db=True):
 
 ###########################################################################
@@ -379,15 +393,21 @@ def generate_infotracer_and_sentiment_table(start_date, end_date, ytb_end_date, 
 ###########################################################################
 
 
-  # information tracer token
-  with open(os.path.expanduser('~/infotracer_token.txt'), 'r') as f:
-      your_token = f.read()
+
 
   # get information tracer query result (also insert to db)
-  df=generate_infotracer_table(start_date=start_date,end_date=end_date,query_dict=query_dict,update_db=update_db)
+  df=generate_infotracer_table(start_date=start_date,
+                               end_date=end_date,
+                               query_dict=query_dict,
+                               config=config,
+                               update_db=update_db
+                               )
 
   #get youtube comment query result
-  ytbcomment_df=query_youtube_comment(start_date=start_date,end_date=ytb_end_date,query_dict=query_dict)
+  ytbcomment_df=query_youtube_comment(start_date=start_date,
+                                      end_date=ytb_end_date,
+                                      query_dict=query_dict,
+                                      config=config)
 
   # merge results
   # text for sentiment table: everything in df + used youtube raw data to extract comment
