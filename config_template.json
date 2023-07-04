@@ -20,7 +20,7 @@
 
 }, 
 
-"database_name": "name of db for this dashboard",
+"database_name": "dashboard", // keep the same as template, do not modify
 
 "delete_all_table_and_restart": false,
 
