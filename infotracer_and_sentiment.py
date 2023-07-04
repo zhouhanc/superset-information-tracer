@@ -376,12 +376,14 @@ def sent_analyze(df):
     print("Batch {} done".format(int(i/8)))
     # for testing only
     if int(i/8)==0:
+      print("test only first batch")
       break
 
   df['label']=label
   df['positive']=pos_prob
   df['neutral']=neu_prob
   df['negative']=neg_prob
+  print("df done")
   return df
 
 
@@ -429,6 +431,7 @@ def generate_infotracer_and_sentiment_table(start_date, end_date, ytb_end_date, 
   # sentiment calculation
 
   full_sentiment=sent_analyze(sentiment)
+  print("sent done")
   
   if update_db==True:
 
@@ -449,7 +452,9 @@ def generate_infotracer_and_sentiment_table(start_date, end_date, ytb_end_date, 
     # commit full sentiment to sentiment table in db
     sent_data = full_sentiment.apply(tuple, axis=1).tolist()
     query="insert into sentiment (text,num_interaction,username,datetime,platform,candidate_name,processed_text,label, positive, neutral, negative) Values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s);" 
+    print("start insert")
     mycursor.executemany(query,sent_data)
+    print("inset done")
 
     mydb.commit()
     mydb.close()
