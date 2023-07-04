@@ -358,7 +358,7 @@ def text_process(df):
 
 # do sentiment analysis in batches
 def sent_analyze(df):
-  batch=8
+  batch=1
   analyzer = create_analyzer(task="sentiment", lang="es", batch_size=batch)
 
   text=df['processed_text'].tolist() #list of texts
