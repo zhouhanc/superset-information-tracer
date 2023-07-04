@@ -374,6 +374,9 @@ def sent_analyze(df):
     neu_prob+=[r.probas['NEU'] for r in analyze_result]
     neg_prob+=[r.probas['NEG'] for r in analyze_result]
     print("Batch {} done".format(int(i/8)))
+    # for testing only
+    if int(i/8)==3:
+      break
 
   df['label']=label
   df['positive']=pos_prob
