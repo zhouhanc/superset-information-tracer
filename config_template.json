@@ -1,7 +1,7 @@
 
 {
 "db_info":{
-    "localhost": "mysql address",
+    "localhost": "mysql self-defined container name", // after connecting the container to docker shared network, can use container name instead of machine public address to connect
     "username":"root",
     "pw": "password"
 },
