@@ -376,18 +376,16 @@ def sent_analyze(df):
     print("Batch {} done".format(int(i/32)))
     #################################
     # for testing only
-    if int(i/32)==0:
-      print("test only first batch")
+    if int(i/32)==4:
+      print("test only five batches")
       break
-  n = len(label)  
-  df.loc[:n-1, 'label'] = label  
-  df.loc[n:, 'label'] = np.nan  
+  
+  n = len(label)
+  df.loc[:n-1, 'label'] = label
   df.loc[:n-1, 'positive'] = pos_prob
-  df.loc[n:, 'positive'] = np.nan 
-  df.loc[:n-1, 'neutral'] = neu_prob 
-  df.loc[n:, 'neutral'] = np.nan 
+  df.loc[:n-1, 'neutral'] = neu_prob
   df.loc[:n-1, 'negative'] = neg_prob
-  df.loc[n:, 'negative'] = np.nan 
+  df.loc[n:, ['label', 'positive', 'neutral', 'negative']] = np.nan
     #################################
 
   # df['label']=label
