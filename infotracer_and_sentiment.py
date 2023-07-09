@@ -373,26 +373,14 @@ def sent_analyze(df):
     pos_prob+=[r.probas['POS'] for r in analyze_result]
     neu_prob+=[r.probas['NEU'] for r in analyze_result]
     neg_prob+=[r.probas['NEG'] for r in analyze_result]
-    print("Batch {} done".format(int(i/32)))
-    #################################
-    # for testing only
-    if int(i/32)==4:
-      print("test only five batches")
-      break
-  
-  n = len(label)
-  df.loc[:n-1, 'label'] = label
-  df.loc[:n-1, 'positive'] = pos_prob
-  df.loc[:n-1, 'neutral'] = neu_prob
-  df.loc[:n-1, 'negative'] = neg_prob
-  df.loc[n:, ['label', 'positive', 'neutral', 'negative']] = np.nan
-    #################################
+    print("Batch {} done".format(int(i/32)+1))
 
-  # df['label']=label
-  # df['positive']=pos_prob
-  # df['neutral']=neu_prob
-  # df['negative']=neg_prob
-  # print("df done")
+
+  df['label']=label
+  df['positive']=pos_prob
+  df['neutral']=neu_prob
+  df['negative']=neg_prob
+  print("df done")
   return df
 
 
